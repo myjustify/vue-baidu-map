@@ -41,7 +41,5 @@ dist
 
 # coverage
 coverage
-
-/index.js
 .idea
 yarn.lock

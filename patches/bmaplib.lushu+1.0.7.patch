@@ -1,5 +1,5 @@
 diff --git a/node_modules/bmaplib.lushu/index.js b/node_modules/bmaplib.lushu/index.js
-index a793df6..5478b9a 100644
+index a793df6..4dd8988 100644
 --- a/node_modules/bmaplib.lushu/index.js
 +++ b/node_modules/bmaplib.lushu/index.js
 @@ -277,7 +277,9 @@
@@ -7,7 +7,7 @@ index a793df6..5478b9a 100644
                  count = Math.round(me._getDistance(init_pos, target_pos) / step);
              if (count < 1) {
 -                me._moveNext(++me.i);
-+                setTimeout(() => { // 解决lushu重复点过多 内存溢出
++                setTimeout(function(){ // 解决lushu重复点过多 内存溢出
 +                    me._moveNext(++me.i);
 +                }, 0)
                  return;
