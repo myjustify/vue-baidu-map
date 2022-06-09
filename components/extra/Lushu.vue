@@ -65,7 +65,7 @@ export default {
         const {originInstance, content} = this
         const newMarker = createIcon(BMap, val)
         originInstance._opts.icon = newMarker
-        originInstance._marker = newMarker
+        // originInstance._marker = newMarker
       },
       deep: true
     },
