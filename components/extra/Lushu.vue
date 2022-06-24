@@ -115,6 +115,9 @@ export default {
           this._isEnd = true
           this.$emit('stop')
         },
+        onTick: e => {
+          this.$emit('tick', e)
+        },
         onpause: e => this.$emit('pause')
       })
       play && path.length && lushu.start(this)

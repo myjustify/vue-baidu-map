@@ -1,15 +1,12 @@
 diff --git a/node_modules/bmaplib.lushu/index.js b/node_modules/bmaplib.lushu/index.js
-index a793df6..4dd8988 100644
+index a793df6..0274623 100644
 --- a/node_modules/bmaplib.lushu/index.js
 +++ b/node_modules/bmaplib.lushu/index.js
-@@ -277,7 +277,9 @@
-                 target_pos = this._projection.lngLatToPoint(targetPos),
-                 count = Math.round(me._getDistance(init_pos, target_pos) / step);
-             if (count < 1) {
--                me._moveNext(++me.i);
-+                setTimeout(function(){ // 解决lushu重复点过多 内存溢出
-+                    me._moveNext(++me.i);
-+                }, 0)
-                 return;
-             }
-             me._intervalFlag = setInterval(function() {
+@@ -352,6 +352,7 @@
+         _moveNext: function(index) {
+             var me = this;
+             if (index < this._path.length - 1) {
++                me._opts.onTick && me._opts.onTick(index);
+                 me._move(me._path[index], me._path[index + 1], me._tween.linear);
+             } else {
+                 me.stop()
