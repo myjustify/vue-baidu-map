@@ -1,12 +1,82 @@
 diff --git a/node_modules/bmaplib.lushu/index.js b/node_modules/bmaplib.lushu/index.js
-index a793df6..0274623 100644
+index a793df6..c56b2f4 100644
 --- a/node_modules/bmaplib.lushu/index.js
 +++ b/node_modules/bmaplib.lushu/index.js
-@@ -352,6 +352,7 @@
+@@ -161,7 +161,7 @@
+         }
+         this._map = map;
+         this._path = path;
+-        this.i = 0;
++        this.i = -1;
+         this._setTimeoutQuene = [];
+         this._projection = this._map.getMapType().getProjection();
+         this._opts = {
+@@ -191,14 +191,15 @@
+         var me = this,
+             len = me._path.length;
+         this._opts.onstart && this._opts.onstart(me)
+-        if (me.i && me.i < len - 1) {
++        if (me.i != -1 && me.i < len - 1) {
+             if (!me._fromPause) {
+                 return;
+             }else if(!me._fromStop){
+ 	            me._moveNext(++me.i);
+             }
+         }else {
+-            !me._marker && me._addMarker();
++            me.i = 0;
++            me._addMarker();
+             me._timeoutFlag = setTimeout(function() {
+                     !me._overlay && me._addInfoWin();
+                     me._moveNext(me.i);
+@@ -208,7 +209,7 @@
+         this._fromStop = false;
+     },
+     LuShu.prototype.stop = function() {
+-        this.i = 0;
++        this.i = -1;
+         this._fromStop = true;
+         clearInterval(this._intervalFlag);
+         this._clearTimeout();
+@@ -268,7 +269,7 @@
+         _getDistance: function(pxA, pxB) {
+             return Math.sqrt(Math.pow(pxA.x - pxB.x, 2) + Math.pow(pxA.y - pxB.y, 2));
+         },
+-        _move: function(initPos,targetPos,effect) {
++        _move: function(initPos,targetPos,effect, index) {
+             var me = this,
+                 currentCount = 0,
+                 timer = 10,
+@@ -277,15 +278,18 @@
+                 target_pos = this._projection.lngLatToPoint(targetPos),
+                 count = Math.round(me._getDistance(init_pos, target_pos) / step);
+             if (count < 1) {
++                me._opts.onTick && me._opts.onTick(index);
+                 me._moveNext(++me.i);
+                 return;
+             }
+             me._intervalFlag = setInterval(function() {
+ 	            if (currentCount >= count) {
++                  me._opts.onTick && me._opts.onTick(index);
+ 	                clearInterval(me._intervalFlag);
+-		        	if(me.i > me._path.length){
+-						return;
+-		        	}
++                  if(me.i > me._path.length){
++                      me._opts.onTick && me._opts.onTick(index);
++                    return;
++                  }
+ 	                me._moveNext(++me.i);
+ 	            } else {
+                     currentCount++;
+@@ -352,8 +356,9 @@
          _moveNext: function(index) {
              var me = this;
              if (index < this._path.length - 1) {
-+                me._opts.onTick && me._opts.onTick(index);
-                 me._move(me._path[index], me._path[index + 1], me._tween.linear);
+-                me._move(me._path[index], me._path[index + 1], me._tween.linear);
++                me._move(me._path[index], me._path[index + 1], me._tween.linear, index);
              } else {
++                me._opts.onTick && me._opts.onTick(index);
                  me.stop()
+             }
+         },
