@@ -64,6 +64,7 @@ export default {
     'mouseup',
     'mouseout',
     'mouseover',
+    'mousemove',
     'remove',
     'lineupdate'
   ],
