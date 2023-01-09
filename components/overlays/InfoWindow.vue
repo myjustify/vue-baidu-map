@@ -1,17 +1,17 @@
 <template>
-<div v-show="show">
-  <slot></slot>
-</div>
+  <div v-show="show">
+    <slot />
+  </div>
 </template>
 
 <script>
 import commonMixin from '../base/mixins/common.js'
 import bindEvents from '../base/bindEvent.js'
-import {createPoint, createSize} from '../base/factory.js'
-
+import { createPoint, createSize } from '../base/factory.js'
+const { methods, ...reset } = commonMixin('overlay')
+const global = window
 export default {
   name: 'bm-info-window',
-  mixins: [commonMixin('overlay')],
   props: {
     show: {
       type: Boolean
@@ -91,7 +91,7 @@ export default {
       this.originInstance.redraw()
     },
     load () {
-      const {BMap, map, show, title, width, height, maxWidth, offset, autoPan, closeOnClick, message, maximize, bindObserver, $parent} = this
+      const { BMap, map, show, title, width, height, maxWidth, offset, autoPan, closeOnClick, message, maximize, bindObserver, $parent } = this
       const $content = this.$el
       const overlay = new BMap.InfoWindow($content, {
         width,
@@ -121,17 +121,22 @@ export default {
       if (!MutationObserver) {
         return
       }
-      const {$el, originInstance} = this
+      const { $el, originInstance } = this
       this.observer = new MutationObserver(mutations => originInstance.redraw())
-      this.observer.observe($el, {attributes: true, childList: true, characterData: true, subtree: true})
+      this.observer.observe($el, { attributes: true,
+        childList: true,
+        characterData: true,
+        subtree: true })
     },
     openInfoWindow () {
-      const {BMap, $container, position, originInstance} = this
+      const { BMap, $container, position, originInstance } = this
       $container.openInfoWindow(originInstance, createPoint(BMap, position))
     },
     closeInfoWindow () {
       this.$container.closeInfoWindow(this.originInstance)
-    }
-  }
+    },
+    ...methods
+  },
+  ...reset
 }
 </script>

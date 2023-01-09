@@ -1,15 +1,27 @@
 <template>
-<div>
-  <div v-if="!hasBmView" ref="view" style="width: 100%; height: 100%">
+  <div>
+    <div
+      v-if="!hasBmView"
+      ref="view"
+      style="width: 100%; height: 100%"
+    />
+    <slot />
   </div>
-  <slot></slot>
-</div>
 </template>
 
 <script>
 import bindEvents from '../base/bindEvent.js'
-import {checkType} from '../base/util.js'
+import { checkType } from '../base/util.js'
+const global = window
+const mapType = 'webgl' // webgl -> BMapGL v3/v2 -> BMap
+const BAIDU_MAP_NAME = mapType === 'webgl' ? 'BMapGL' : 'BMap'
+const SCRIPT_SRC = mapType === 'webgl'
+  ? `//api.map.baidu.com/api?v=1.0&&type=webgl&callback=_initBaiduMap`
+  : mapType === 'v3'
+    ? `//api.map.baidu.com/api?v=3.0&callback=_initBaiduMap`
+    : `//api.map.baidu.com/api?v=2.0&callback=_initBaiduMap`
 
+const SET_MAP_STYLE = mapType === 'webgl' ? 'setMapStyleV2' : 'setMapStyle'
 export default {
   name: 'bm-map',
   props: {
@@ -20,7 +32,8 @@ export default {
       type: [Object, String]
     },
     zoom: {
-      type: Number
+      type: Number,
+      default: 5
     },
     minZoom: {
       type: Number
@@ -78,37 +91,42 @@ export default {
       type: Object
     }
   },
+  data () {
+    return {
+      hasBmView: false
+    }
+  },
   watch: {
     center (val, oldVal) {
-      const {map, zoom} = this
+      const { map, zoom } = this
       if (checkType(val) === 'String' && val !== oldVal) {
         map.centerAndZoom(val, zoom)
       }
     },
     'center.lng' (val, oldVal) {
-      const {BMap, map, zoom, center} = this
+      const { BMap, map, zoom, center } = this
       if (val !== oldVal && val >= -180 && val <= 180) {
         map.centerAndZoom(new BMap.Point(val, center.lat), zoom)
       }
     },
     'center.lat' (val, oldVal) {
-      const {BMap, map, zoom, center} = this
+      const { BMap, map, zoom, center } = this
       if (val !== oldVal && val >= -74 && val <= 74) {
         map.centerAndZoom(new BMap.Point(center.lng, val), zoom)
       }
     },
     zoom (val, oldVal) {
-      const {map} = this
+      const { map } = this
       if (val !== oldVal && val >= 3 && val <= 19) {
         map.setZoom(val)
       }
     },
     minZoom (val) {
-      const {map} = this
+      const { map } = this
       map.setMinZoom(val)
     },
     maxZoom (val) {
-      const {map} = this
+      const { map } = this
       map.setMaxZoom(val)
     },
     highResolution () {
@@ -118,50 +136,50 @@ export default {
       this.reset()
     },
     mapType (val) {
-      const {map} = this
+      const { map } = this
       map.setMapType(global[val])
     },
     dragging (val) {
-      const {map} = this
+      const { map } = this
       val ? map.enableDragging() : map.disableDragging()
     },
     scrollWheelZoom (val) {
-      const {map} = this
+      const { map } = this
       val ? map.enableScrollWheelZoom() : map.disableScrollWheelZoom()
     },
     doubleClickZoom (val) {
-      const {map} = this
+      const { map } = this
       val ? map.enableDoubleClickZoom() : map.disableDoubleClickZoom()
     },
     keyboard (val) {
-      const {map} = this
+      const { map } = this
       val ? map.enableKeyboard() : map.disableKeyboard()
     },
     inertialDragging (val) {
-      const {map} = this
+      const { map } = this
       val ? map.enableInertialDragging() : map.disableInertialDragging()
     },
     continuousZoom (val) {
-      const {map} = this
+      const { map } = this
       val ? map.enableContinuousZoom() : map.disableContinuousZoom()
     },
     pinchToZoom (val) {
-      const {map} = this
+      const { map } = this
       val ? map.enablePinchToZoom() : map.disablePinchToZoom()
     },
     autoResize (val) {
-      const {map} = this
+      const { map } = this
       val ? map.enableAutoResize() : map.disableAutoResize()
     },
     theme (val) {
-      const {map} = this
-      map.setMapStyle({styleJson: val})
+      const { map } = this
+      map[SET_MAP_STYLE]({ styleJson: val })
     },
     'mapStyle.features': {
       handler (val, oldVal) {
-        const {map, mapStyle} = this
-        const {style, styleJson} = mapStyle
-        map.setMapStyle({
+        const { map, mapStyle } = this
+        const { style, styleJson } = mapStyle
+        map[SET_MAP_STYLE]({
           styleJson,
           features: val,
           style
@@ -170,9 +188,9 @@ export default {
       deep: true
     },
     'mapStyle.style' (val, oldVal) {
-      const {map, mapStyle} = this
-      const {features, styleJson} = mapStyle
-      map.setMapStyle({
+      const { map, mapStyle } = this
+      const { features, styleJson } = mapStyle
+      map[SET_MAP_STYLE]({
         styleJson,
         features,
         style: val
@@ -180,9 +198,9 @@ export default {
     },
     'mapStyle.styleJson': {
       handler (val, oldVal) {
-        const {map, mapStyle} = this
-        const {features, style} = mapStyle
-        map.setMapStyle({
+        const { map, mapStyle } = this
+        const { features, style } = mapStyle
+        map[SET_MAP_STYLE]({
           styleJson: val,
           features,
           style
@@ -191,13 +209,16 @@ export default {
       deep: true
     },
     mapStyle (val) {
-      const {map, theme} = this
-      !theme && map.setMapStyle(val)
+      const { map, theme } = this
+      !theme && map[SET_MAP_STYLE](val)
     }
+  },
+  mounted () {
+    this.reset()
   },
   methods: {
     setMapOptions () {
-      const {map, minZoom, maxZoom, mapType, dragging, scrollWheelZoom, doubleClickZoom, keyboard, inertialDragging, continuousZoom, pinchToZoom, autoResize} = this
+      const { map, minZoom, maxZoom, mapType, dragging, scrollWheelZoom, doubleClickZoom, keyboard, inertialDragging, continuousZoom, pinchToZoom, autoResize } = this
       minZoom && map.setMinZoom(minZoom)
       maxZoom && map.setMaxZoom(maxZoom)
       mapType && map.setMapType(global[mapType])
@@ -215,32 +236,34 @@ export default {
         return
       }
       let $el = this.$refs.view
-      for (let $node of this.$slots.default || []) {
-        if ($node.componentOptions && $node.componentOptions.tag === 'bm-view') {
-          this.hasBmView = true
-          $el = $node.elm
-        }
-      }
-      const map = new BMap.Map($el, {enableHighResolution: this.highResolution, enableMapClick: this.mapClick})
-      this.map = map
-      const {setMapOptions, zoom, getCenterPoint, theme, mapStyle} = this
-      theme ? map.setMapStyle({styleJson: theme}) : map.setMapStyle(mapStyle)
-      setMapOptions()
-      bindEvents.call(this, map)
-      // 此处强行初始化一次地图 回避一个由于错误的 center 字符串导致初始化失败抛出的错误
-      map.reset()
-      map.centerAndZoom(getCenterPoint(), zoom)
-      this.$emit('ready', {BMap, map})
+      // for (let $node of this.$slots.default || []) {
+      //   if ($node.componentOptions && $node.componentOptions.tag === 'bm-view') {
+      //     this.hasBmView = true
+      //     $el = $node.elm
+      //   }
+      // }
+      setTimeout(() => {
+        const map = new BMap.Map($el, { enableHighResolution: this.highResolution, enableMapClick: this.mapClick })
+        this.map = map
+        const { setMapOptions, zoom, getCenterPoint, theme, mapStyle } = this
+        theme ? map[SET_MAP_STYLE]({ styleJson: theme }) : (mapStyle && map[SET_MAP_STYLE](mapStyle))
+        setMapOptions()
+        bindEvents.call(this, map)
+        // 此处强行初始化一次地图 回避一个由于错误的 center 字符串导致初始化失败抛出的错误
+        // map.reset()
+        map.centerAndZoom(getCenterPoint(), zoom)
+        this.$emit('ready', { BMap, map })
+      })
       // Debug
       // global.map = map
       // global.mapComponent = this
     },
     getCenterPoint () {
-      const {center, BMap} = this
+      const { center, BMap } = this
       switch (checkType(center)) {
-        case 'String': return center
-        case 'Object': return new BMap.Point(center.lng, center.lat)
-        default: return new BMap.Point()
+      case 'String': return center
+      case 'Object': return new BMap.Point(center.lng, center.lat)
+      default: return new BMap.Point()
       }
     },
     initMap (BMap) {
@@ -248,39 +271,31 @@ export default {
       this.init(BMap)
     },
     getMapScript () {
-      if (!global.BMap) {
+      if (!global[BAIDU_MAP_NAME]) {
         const ak = this.ak || this._BMap().ak
-        global.BMap = {}
-        global.BMap._preloader = new Promise((resolve, reject) => {
+        global[BAIDU_MAP_NAME] = {}
+        global[BAIDU_MAP_NAME]._preloader = new Promise((resolve, reject) => {
           global._initBaiduMap = function () {
-            resolve(global.BMap)
+            resolve(global[BAIDU_MAP_NAME])
             global.document.body.removeChild($script)
-            global.BMap._preloader = null
+            global[BAIDU_MAP_NAME]._preloader = null
             global._initBaiduMap = null
           }
           const $script = document.createElement('script')
           global.document.body.appendChild($script)
-          $script.src = `https://api.map.baidu.com/api?v=3.0&ak=${ak}&callback=_initBaiduMap`
+          $script.src = SCRIPT_SRC + `&ak=${ak}`
         })
-        return global.BMap._preloader
-      } else if (!global.BMap._preloader) {
-        return Promise.resolve(global.BMap)
+        return global[BAIDU_MAP_NAME]._preloader
+      } else if (!global[BAIDU_MAP_NAME]._preloader) {
+        return Promise.resolve(global[BAIDU_MAP_NAME])
       } else {
-        return global.BMap._preloader
+        return global[BAIDU_MAP_NAME]._preloader
       }
     },
     reset () {
-      const {getMapScript, initMap} = this
+      const { getMapScript, initMap } = this
       getMapScript()
         .then(initMap)
-    }
-  },
-  mounted () {
-    this.reset()
-  },
-  data () {
-    return {
-      hasBmView: false
     }
   }
 }

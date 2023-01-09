@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://dafrok.github.io/vue-baidu-map/favicon.png" width="200px">
 </p>
-<p align="center">Baidu Map components for Vue 2.x</p>
+<p align="center">Baidu Map components for Vue 3.x</p>
 
 [![npm](https://img.shields.io/npm/v/vue-baidu-map.svg)]()
 [![Travis](https://img.shields.io/travis/Dafrok/vue-baidu-map.svg)]()

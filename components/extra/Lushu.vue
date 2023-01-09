@@ -3,11 +3,10 @@
 import commonMixin from '../base/mixins/common.js'
 import {createIcon} from '../base/factory.js'
 import Lushu from 'bmaplib.lushu'
-
+const { methods, ...reset } = commonMixin('lushu')
 export default {
   name: 'bm-lushu',
   render (h) {},
-  mixins: [commonMixin('lushu')],
   props: {
     path: {
       type: Array,
@@ -122,7 +121,9 @@ export default {
       })
       play && path.length && lushu.start(this)
       path.length && (content && infoWindow ? lushu.showInfoWindow() : lushu.hideInfoWindow())
-    }
-  }
+    },
+    ...methods
+  },
+  ...reset
 }
 </script>

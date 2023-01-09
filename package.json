@@ -1,14 +1,14 @@
 {
-  "name": "vue-baidu-map",
-  "version": "0.21.22",
-  "description": "Baidu Map Component for Vue 2.0",
+  "name": "v3-baidu-map",
+  "version": "0.0.1",
+  "description": "Baidu Map Component for Vue 3.0",
   "main": "index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "build:docs": "webpack -p --config ./build/webpack.docs.config.js",
-    "build": "patch-package && webpack -p --config ./build/webpack.prod.config.js",
+    "build:docs": "webpack --config ./build/webpack.docs.config.js",
+    "build": "patch-package && webpack --config ./build/webpack.prod.config.js",
     "dev": "webpack-dev-server --content-base docs --config ./build/webpack.docs.config.js --hot --inline",
     "deploy": "npm run build && npm run build:docs",
     "test": "karma start",
@@ -28,21 +28,13 @@
     "baidu",
     "map"
   ],
-  "author": "Dafrok <o.o@mug.dog>",
+  "author": "duanyong",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Dafrok/vue-baidu-map/issues"
-  },
-  "homepage": "https://github.com/Dafrok/vue-baidu-map#readme",
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^7.2.3",
-    "babel-loader": "^6.2.10",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-module-alias": "^1.6.0",
-    "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-plugin-transform-es2015-modules-umd": "^6.24.0",
-    "babel-preset-es2015": "^6.18.0",
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.2",
     "bmaplib.distancetool": "^1.0.2",
     "bulma": "^0.3.0",
     "chai": "^4.0.2",
@@ -76,13 +68,14 @@
     "stylus-loader": "^3.0.1",
     "url-loader": "^0.5.7",
     "vue": "^2.4.3",
-    "vue-loader": "^10.0.2",
+    "vue-loader": "14.2.2",
     "vue-markdown-loader": "^0.6.2",
     "vue-material": "^0.7.4",
     "vue-router": "^2.7.0",
-    "vue-template-compiler": "^2.1.8",
-    "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.4"
+    "vue-template-compiler": "^2.7.14",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
   },
   "peerDependencies": {
     "vue": "^2.1.8"
@@ -92,6 +85,7 @@
     "bmaplib.heatmap": "^1.0.4",
     "bmaplib.lushu": "^1.0.7",
     "bmaplib.markerclusterer": "^1.0.13",
+    "lodash-es": "^4.17.21",
     "markdown-it": "^8.4.0",
     "patch-package": "^6.4.7"
   }

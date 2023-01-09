@@ -4,6 +4,7 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
+  mode: 'production',
   entry: {
     main: 'docs/main.js',
     libs: [

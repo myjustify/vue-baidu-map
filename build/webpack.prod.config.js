@@ -2,6 +2,7 @@ const path = require('path')
 
 module.exports = {
   entry: './components/index.js',
+  mode: 'production',
   output: {
     path: path.resolve(__dirname, './'),
     filename: '../index.js',

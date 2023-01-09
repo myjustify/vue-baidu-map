@@ -6,6 +6,7 @@ module.exports = {
   //   library: 'VueBaiduMap',
   //   libraryTarget: 'umd'
   // },
+  mode: 'development',
   module: {
     rules: [
       {

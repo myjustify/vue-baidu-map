@@ -5,7 +5,7 @@ const compiler = require('vue-template-compiler')
 const path = require('path')
 const fs = require('fs')
 const pug = require('pug')
-const babel = require('babel-core')
+const babel = require('@babel/core')
 const rmdir = require('rmdir')
 
 const rootPath = path.resolve(__dirname, '../src')
