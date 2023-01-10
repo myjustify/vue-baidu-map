@@ -43,3 +43,4 @@ dist
 coverage
 .idea
 yarn.lock
+package-lock
