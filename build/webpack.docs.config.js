@@ -70,19 +70,21 @@ module.exports = {
       docs: path.resolve(__dirname, '../docs')
     }
   },
+  // optimize: {
+  //   CommonsChunkPlugin: {
+  //       names: ['vendor', 'libs', 'resource', 'manifest'],
+  //       minChunks: Infinity
+  //     }
+  // },
   plugins: [
     new VueLoaderPlugin(),
-    new webpack.HashedModuleIdsPlugin(),
+    // new webpack.HashedModuleIdsPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../docs/template/index.html'),
       chunks: ['libs', 'vendor', 'resource', 'main']
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'libs', 'resource', 'manifest'],
-      minChunks: Infinity
-    }),
-    new InlineManifestWebpackPlugin({
-      name: 'webpackManifest'
-    })
+    // new InlineManifestWebpackPlugin({
+    //   name: 'webpackManifest'
+    // })
   ]
 }
