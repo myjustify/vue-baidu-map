@@ -57,7 +57,7 @@ function transformAlias (content, level) {
 function transformES (content) {
   return babel.transform(content, {
     presets: [
-      'es2015'
+      'es2018'
     ]
   }).code
 }

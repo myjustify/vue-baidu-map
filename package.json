@@ -1,6 +1,6 @@
 {
   "name": "v3-baidu-map",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Baidu Map Component for Vue 3.0",
   "main": "index.js",
   "directories": {
@@ -67,7 +67,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "url-loader": "^0.5.7",
-    "vue": "^2.4.3",
+    "vue": "^3.2.41",
     "vue-loader": "14.2.2",
     "vue-markdown-loader": "^0.6.2",
     "vue-material": "^0.7.4",
@@ -78,7 +78,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "peerDependencies": {
-    "vue": "^2.1.8"
+    "vue": "^3.2.41"
   },
   "dependencies": {
     "bmaplib.curveline": "^1.0.0",

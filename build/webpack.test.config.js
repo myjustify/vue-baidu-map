@@ -1,3 +1,4 @@
+const { VueLoaderPlugin } = require('vue-loader')
 module.exports = {
   // entry: './src/index.js',
   // output: {
@@ -24,5 +25,8 @@ module.exports = {
     alias: {
       vue: 'vue/dist/vue.js'
     }
-  }
+  },
+  plugins: [
+    new VueLoaderPlugin()
+  ]
 }

@@ -1,5 +1,5 @@
 const path = require('path')
-
+const { VueLoaderPlugin } = require('vue-loader')
 module.exports = {
   entry: './components/index.js',
   mode: 'production',
@@ -21,5 +21,8 @@ module.exports = {
         exclude: /node_modules/
       }
     ]
-  }
+  },
+  plugins: [
+    new VueLoaderPlugin()
+  ]
 }

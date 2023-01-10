@@ -2,7 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
 const webpack = require('webpack')
-
+const { VueLoaderPlugin } = require('vue-loader')
 module.exports = {
   mode: 'production',
   entry: {
@@ -71,6 +71,7 @@ module.exports = {
     }
   },
   plugins: [
+    new VueLoaderPlugin(),
     new webpack.HashedModuleIdsPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../docs/template/index.html'),
