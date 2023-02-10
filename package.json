@@ -1,6 +1,6 @@
 {
   "name": "v3-baidu-map",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "type": "module",
   "main": "dist/v3-baidu-map.js",
   "exports": {
@@ -9,14 +9,17 @@
   "types": "types/index.d.ts",
   "files": [
     "dist",
-    "types"
+    "types",
+    "src"
   ],
+  "repository": {
+    "url": "https://github.com/myjustify/vue-baidu-map/tree/v3"
+  },
   "scripts": {
     "dev": "patch-package && vite -c ./vite.dev.config.ts",
     "build": "patch-package && vite build"
   },
   "dependencies": {
-    "lit": "^2.6.1",
     "sass": "^1.58.0",
     "vue": "^3.2.45"
   },
