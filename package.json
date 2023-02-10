@@ -1,92 +1,35 @@
 {
   "name": "v3-baidu-map",
-  "version": "0.0.2",
-  "description": "Baidu Map Component for Vue 3.0",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "build:docs": "webpack --config ./build/webpack.docs.config.js",
-    "build": "patch-package && webpack --config ./build/webpack.prod.config.js",
-    "dev": "webpack-dev-server --content-base docs --config ./build/webpack.docs.config.js --hot --inline",
-    "deploy": "npm run build && npm run build:docs",
-    "test": "karma start",
-    "lint": "eslint --ext .js,.vue src docs build",
-    "prepublishOnly": "npm run build"
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/index.es.js",
+  "exports": {
+    ".": "./dist/v3-baidu-map.js.es.js"
   },
   "types": "types/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Dafrok/vue-baidu-map.git"
-  },
-  "keywords": [
-    "vue",
-    "baidu-map",
-    "bmap",
-    "vue-baidu-map",
-    "baidu",
-    "map"
+  "files": [
+    "dist",
+    "types"
   ],
-  "author": "duanyong",
-  "license": "MIT",
-  "devDependencies": {
-    "@babel/cli": "^7.20.7",
-    "@babel/core": "^7.20.12",
-    "@babel/preset-env": "^7.20.2",
-    "babel-loader": "^9.1.2",
-    "bmaplib.distancetool": "^1.0.2",
-    "bulma": "^0.3.0",
-    "chai": "^4.0.2",
-    "css-loader": "^0.26.1",
-    "eslint": "^3.19.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-html": "^2.0.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-node": "^4.2.2",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "file-loader": "^0.10.0",
-    "github-markdown-css": "^2.4.1",
-    "html-webpack-plugin": "^2.26.0",
-    "inline-manifest-webpack-plugin": "^3.0.1",
-    "karma": "^1.7.0",
-    "karma-chrome-launcher": "^2.1.1",
-    "karma-coverage": "^1.1.1",
-    "karma-mocha": "^1.3.0",
-    "karma-webpack": "^2.0.3",
-    "material-design-icons": "^3.0.1",
-    "mocha": "^3.4.2",
-    "prismjs": "^1.6.0",
-    "pug": "^2.0.0-beta6",
-    "requirejs": "^2.3.3",
-    "rmdir": "^1.2.0",
-    "roboto-fontface": "^0.7.0",
-    "style-loader": "^0.13.1",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
-    "url-loader": "^0.5.7",
-    "vue": "^3.2.41",
-    "vue-loader": "14.2.2",
-    "vue-markdown-loader": "^0.6.2",
-    "vue-material": "^0.7.4",
-    "vue-router": "^2.7.0",
-    "vue-template-compiler": "^2.7.14",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1"
-  },
-  "peerDependencies": {
-    "vue": "^3.2.41"
+  "scripts": {
+    "dev": "patch-package && vite",
+    "build": "patch-package && vite build"
   },
   "dependencies": {
+    "lit": "^2.6.1",
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0",
+    "bmaplib.distancetool": "^1.0.2",
     "bmaplib.curveline": "^1.0.0",
     "bmaplib.heatmap": "^1.0.4",
     "bmaplib.lushu": "^1.0.7",
     "bmaplib.markerclusterer": "^1.0.13",
     "lodash-es": "^4.17.21",
     "markdown-it": "^8.4.0",
-    "patch-package": "^6.4.7"
+    "patch-package": "^6.4.7",
+    "@vitejs/plugin-vue": "^4.0.0"
   }
 }
