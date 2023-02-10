@@ -1,10 +1,10 @@
 {
   "name": "v3-baidu-map",
-  "version": "0.0.0",
+  "version": "0.0.13",
   "type": "module",
-  "main": "dist/index.es.js",
+  "main": "dist/v3-baidu-map.js",
   "exports": {
-    ".": "./dist/v3-baidu-map.js.es.js"
+    ".": "./dist/v3-baidu-map.js"
   },
   "types": "types/index.d.ts",
   "files": [
@@ -12,24 +12,25 @@
     "types"
   ],
   "scripts": {
-    "dev": "patch-package && vite",
+    "dev": "patch-package && vite -c ./vite.dev.config.ts",
     "build": "patch-package && vite build"
   },
   "dependencies": {
     "lit": "^2.6.1",
+    "sass": "^1.58.0",
     "vue": "^3.2.45"
   },
   "devDependencies": {
-    "typescript": "^4.9.3",
-    "vite": "^4.1.0",
-    "bmaplib.distancetool": "^1.0.2",
+    "@vitejs/plugin-vue": "^4.0.0",
     "bmaplib.curveline": "^1.0.0",
+    "bmaplib.distancetool": "^1.0.2",
     "bmaplib.heatmap": "^1.0.4",
     "bmaplib.lushu": "^1.0.7",
     "bmaplib.markerclusterer": "^1.0.13",
     "lodash-es": "^4.17.21",
     "markdown-it": "^8.4.0",
     "patch-package": "^6.4.7",
-    "@vitejs/plugin-vue": "^4.0.0"
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
   }
 }
