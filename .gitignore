@@ -7,8 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
 dist-ssr
 *.local
 
