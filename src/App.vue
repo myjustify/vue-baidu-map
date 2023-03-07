@@ -5,16 +5,19 @@
         :center="state.center"
         :zoom="state.zoom"
         :scroll-wheel-zoom="true"
-        @moving="syncCenterAndZoom"
-        @moveend="syncCenterAndZoom"
-        @zoomend="syncCenterAndZoom"
         @ready="mapReady"
-    />
+    >
+      <template v-if="state.map">
+        <bm-marker
+            :position="{ lng: state.center.lng, lat:state.center.lat }"
+        />
+      </template>
+    </baidu-map>
   </div>
 </template>
 
 <script setup>
-import { reactive } from "vue"
+import {onMounted, reactive} from "vue"
 defineProps({
   test: String
 })
@@ -24,7 +27,8 @@ const state = reactive({
     lng: 111.52,
     lat: 36.08
   },
-  zoom: 7
+  zoom: 7,
+  map: null
 })
 
 function syncCenterAndZoom(e) {
@@ -35,8 +39,7 @@ function syncCenterAndZoom(e) {
 }
 
 function mapReady({ BMap, map }) {
-  // state.BMap = BMap
-  // state.map = map
+  state.map = map
 }
 </script>
 <style lang="scss" scoped>

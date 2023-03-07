@@ -7,7 +7,7 @@
 <script>
 import commonMixin from '../base/mixins/common.js'
 import bindEvents from '../base/bindEvent.js'
-import { createLabel, createIcon, createPoint } from '../base/factory.js'
+import {createLabel, createIcon, createPoint, clearFalse} from '../base/factory.js'
 const { methods, ...reset } = commonMixin('overlay')
 const global = window
 export default {
@@ -135,8 +135,8 @@ export default {
   },
   methods: {
     load () {
-      const { BMap, map, position, offset, icon, massClear, dragging, clicking, raiseOnDrag, draggingCursor, rotation, shadow, title, label, animation, top, renderByParent, $parent, zIndex } = this
-      const overlay = new BMap.Marker(new BMap.Point(position.lng, position.lat), {
+      const { BMap, map, position, offset, icon, massClear, dragging, clicking, raiseOnDrag, draggingCursor, rotation, shadow, title, label, animation, top, renderByParent, $parent, zIndex } = clearFalse(this)
+      const overlay = new BMap.Marker(new BMap.Point(position.lng, position.lat), clearFalse({
         offset,
         icon: icon && createIcon(BMap, icon),
         enableMassClear: massClear,
@@ -147,7 +147,7 @@ export default {
         rotation,
         shadow,
         title
-      })
+      }))
       this.originInstance = overlay
       label && overlay && overlay.setLabel(createLabel(BMap, label))
       overlay.setTop(top)
