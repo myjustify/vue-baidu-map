@@ -14,7 +14,7 @@ export function createBounds (BMap, options = {}) {
 }
 
 export function createSize (BMap, options = {}) {
-  const { width, height } = options
+  const { width = 0, height = 0 } = options
   return new BMap.Size(width, height)
 }
 
@@ -65,17 +65,18 @@ export function createIconSequence (BMap, options = {}) {
 const isF = (v) => v === null || v === undefined || v === ''
 const isObject = (v) => Object.prototype.toString.call(v) === '[object Object]'
 export function clearFalse(obj, opt = {}) {
-  opt = opt || {
+  opt = {
     dep: true,
     o: true, // 忽略判断空对象
-    a: true // 忽略空数组 咱不实现
+    a: true, // 忽略空数组 咱不实现
+    ...opt
   }
   function fixObj(value = {}, target = {}) {
     for (let k in value) {
       const son = value[k]
       if (isF(son)) continue
       if (opt.o && isObject(son)) {
-        if (Object.keys(son).length) continue;
+        if (!Object.keys(son).length) continue;
         if (opt.dep) {
           target[k] = fixObj(son, {})
         } else {

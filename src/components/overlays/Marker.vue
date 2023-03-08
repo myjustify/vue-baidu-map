@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     load () {
-      const { BMap, map, position, offset, icon, massClear, dragging, clicking, raiseOnDrag, draggingCursor, rotation, shadow, title, label, animation, top, renderByParent, $parent, zIndex } = clearFalse(this)
+      const { BMap, map, position, offset, icon, massClear, dragging, clicking, raiseOnDrag, draggingCursor, rotation, shadow, title, label, animation, top, renderByParent, $parent, zIndex } = this
       const overlay = new BMap.Marker(new BMap.Point(position.lng, position.lat), clearFalse({
         offset,
         icon: icon && createIcon(BMap, icon),

@@ -7,7 +7,7 @@
 <script>
 import commonMixin from '../base/mixins/common.js'
 import bindEvents from '../base/bindEvent.js'
-import { createPoint, createSize } from '../base/factory.js'
+import {clearFalse, createPoint, createSize} from '../base/factory.js'
 const { methods, ...reset } = commonMixin('overlay')
 const global = window
 export default {
@@ -93,7 +93,7 @@ export default {
     load () {
       const { BMap, map, show, title, width, height, maxWidth, offset, autoPan, closeOnClick, message, maximize, bindObserver, $parent } = this
       const $content = this.$el
-      const overlay = new BMap.InfoWindow($content, {
+      const overlay = new BMap.InfoWindow($content, clearFalse({
         width,
         height,
         title,
@@ -103,7 +103,7 @@ export default {
         enableCloseOnClick: closeOnClick,
         enableMessage: typeof message === 'undefined',
         message
-      })
+      }))
 
       maximize ? overlay.enableMaximize() : overlay.disableMaximize()
       bindEvents.call(this, overlay)

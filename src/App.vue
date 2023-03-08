@@ -11,8 +11,23 @@
         <bm-marker
             :position="{ lng: state.center.lng, lat:state.center.lat }"
         />
+        <bm-info-window
+            ref="infoWindow"
+            class="infoWindow"
+            :auto-pan="true"
+            :width="400"
+            :height="0"
+            :position="{ lng: state.center.lng, lat: state.center.lat }"
+            :show="state.show"
+            @open="state.show=true"
+            @close="state.show=false"
+        >
+          <div>1111111</div>
+        </bm-info-window>
       </template>
     </baidu-map>
+
+    <button @click="state.show = true">打开</button>
   </div>
 </template>
 
@@ -28,7 +43,8 @@ const state = reactive({
     lat: 36.08
   },
   zoom: 7,
-  map: null
+  map: null,
+  show: true
 })
 
 function syncCenterAndZoom(e) {
