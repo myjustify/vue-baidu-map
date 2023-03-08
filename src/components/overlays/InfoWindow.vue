@@ -103,7 +103,7 @@ export default {
         enableCloseOnClick: closeOnClick,
         enableMessage: typeof message === 'undefined',
         message
-      }))
+      }, { deep: false }))
 
       maximize ? overlay.enableMaximize() : overlay.disableMaximize()
       bindEvents.call(this, overlay)

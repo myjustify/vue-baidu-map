@@ -21,13 +21,17 @@ export function createSize (BMap, options = {}) {
 export function createIcon (BMap, options = {}) {
   const { url, size, opts = {} } = options
   const { anchor, imageSize, imageOffset, infoWindowAnchor, printImageUrl } = clearFalse(opts)
-  return new BMap.Icon(url, createSize(BMap, size), clearFalse({
-    anchor: anchor && createSize(BMap, anchor),
-    imageSize: imageSize && createSize(BMap, imageSize),
-    imageOffset: imageOffset && createSize(BMap, imageOffset),
-    infoWindowAnchor: infoWindowAnchor && createSize(BMap, infoWindowAnchor),
-    printImageUrl: printImageUrl
-  }))
+  return new BMap.Icon(
+      url,
+      createSize(BMap, size),
+      clearFalse({
+        anchor: anchor && createSize(BMap, anchor),
+        imageSize: imageSize && createSize(BMap, imageSize),
+        imageOffset: imageOffset && createSize(BMap, imageOffset),
+        infoWindowAnchor: infoWindowAnchor && createSize(BMap, infoWindowAnchor),
+        printImageUrl: printImageUrl
+      }, { deep: false })
+  )
 }
 
 export function createLabel (BMap, options = {}) {
@@ -69,7 +73,7 @@ const isF = (v) => v === null || v === undefined || v === ''
 const isObject = (v) => Object.prototype.toString.call(v) === '[object Object]'
 export function clearFalse(obj, opt = {}) {
   opt = {
-    dep: true,
+    deep: true,
     o: true, // 忽略判断空对象
     a: true, // 忽略空数组 咱不实现
     ...opt
@@ -80,7 +84,7 @@ export function clearFalse(obj, opt = {}) {
       if (isF(son)) continue
       if (opt.o && isObject(son)) {
         if (!Object.keys(son).length) continue;
-        if (opt.dep) {
+        if (opt.deep) {
           target[k] = fixObj(son, {})
         } else {
           target[k] = son

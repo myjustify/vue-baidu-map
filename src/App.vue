@@ -47,6 +47,11 @@ function getCar() {
   return car3
 }
 const state = reactive({
+  icon: {
+    url: getCar(),
+    size: { width: 32, height: 49 },
+    opts: { anchor: { width: 16, height: 25 }, imageSize: { width: 32, height: 49 } }
+  },
   center: {
     lng: 111.52,
     lat: 36.08
@@ -65,6 +70,12 @@ function syncCenterAndZoom(e) {
 
 function mapReady({ BMap, map }) {
   state.map = map
+  // const { icon, center } = state
+  // const i = new BMap.Icon(icon.url, new BMap.Size(icon.size.width, icon.size.width))
+  // const o = new BMap.Marker(new BMap.Point(center.lng, center.lat), {
+  //   icon: i
+  // })
+  // map.addOverlay(o)
 }
 </script>
 <style lang="scss" scoped>
