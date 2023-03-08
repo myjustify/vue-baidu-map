@@ -20,35 +20,38 @@ export function createSize (BMap, options = {}) {
 
 export function createIcon (BMap, options = {}) {
   const { url, size, opts = {} } = options
+  const { anchor, imageSize, imageOffset, infoWindowAnchor, printImageUrl } = clearFalse(opts)
   return new BMap.Icon(url, createSize(BMap, size), clearFalse({
-    anchor: opts.anchor && createSize(BMap, opts.anchor),
-    imageSize: opts.imageSize && createSize(BMap, opts.imageSize),
-    imageOffset: opts.imageOffset && createSize(BMap, opts.imageOffset),
-    infoWindowAnchor: opts.infoWindowAnchor && createSize(BMap, opts.infoWindowAnchor),
-    printImageUrl: opts.printImageUrl
+    anchor: anchor && createSize(BMap, anchor),
+    imageSize: imageSize && createSize(BMap, imageSize),
+    imageOffset: imageOffset && createSize(BMap, imageOffset),
+    infoWindowAnchor: infoWindowAnchor && createSize(BMap, infoWindowAnchor),
+    printImageUrl: printImageUrl
   }))
 }
 
 export function createLabel (BMap, options = {}) {
   const { content, opts } = options
+  const { offset, position, enableMassClear } = clearFalse(opts)
   return new BMap.Label(content, {
-    offset: opts.offset && createSize(BMap, opts.offset),
-    position: opts.position && createPoint(BMap, opts.position),
-    enableMassClear: opts.enableMassClear
+    offset: offset && createSize(BMap, offset),
+    position: position && createPoint(BMap, position),
+    enableMassClear: enableMassClear
   })
 }
 
 export function createSymbol (BMap, options = {}) {
   const { path, opts } = options
+  const { anchor, fillColor, fillOpacity, scale, rotation, strokeColor, strokeOpacity, strokeWeight } = opts
   return new BMap.Symbol(global[path] || path, {
-    anchor: opts.anchor && createSize(BMap, opts.anchor),
-    fillColor: opts.fillColor,
-    fillOpacity: opts.fillOpacity,
-    scale: opts.scale,
-    rotation: opts.rotation,
-    strokeColor: opts.strokeColor,
-    strokeOpacity: opts.strokeOpacity,
-    strokeWeight: opts.strokeWeight
+    anchor: anchor && createSize(BMap, anchor),
+    fillColor: fillColor,
+    fillOpacity: fillOpacity,
+    scale: scale,
+    rotation: rotation,
+    strokeColor: strokeColor,
+    strokeOpacity: strokeOpacity,
+    strokeWeight: strokeWeight
   })
 }
 

@@ -10,6 +10,12 @@
       <template v-if="state.map">
         <bm-marker
             :position="{ lng: state.center.lng, lat:state.center.lat }"
+            :icon="{
+                url: getCar(),
+                size: { width: 32, height: 49 },
+                opts: { anchor: { width: 16, height: 25 }, imageSize: { width: 32, height: 49 } }
+            }"
+            :rotation="direction"
         />
         <bm-info-window
             ref="infoWindow"
@@ -33,10 +39,13 @@
 
 <script setup>
 import {onMounted, reactive} from "vue"
+import car3 from "./assets/car3.png"
 defineProps({
   test: String
 })
-
+function getCar() {
+  return car3
+}
 const state = reactive({
   center: {
     lng: 111.52,
@@ -44,7 +53,7 @@ const state = reactive({
   },
   zoom: 7,
   map: null,
-  show: true
+  show: false
 })
 
 function syncCenterAndZoom(e) {
