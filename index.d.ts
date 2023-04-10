@@ -1,3 +1,3 @@
 /// <reference types="typescript" />
 
-declare module 'vue-baidu-map'
+declare module 'v3-baidu-map'
