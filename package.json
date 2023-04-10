@@ -1,6 +1,6 @@
 {
   "name": "v3-baidu-map",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "type": "module",
   "main": "dist/v3-baidu-map.js",
   "exports": {
@@ -10,7 +10,8 @@
   "files": [
     "dist",
     "types",
-    "src/components"
+    "src/components",
+    "index.d.ts"
   ],
   "repository": {
     "url": "https://github.com/myjustify/vue-baidu-map/tree/v3"
