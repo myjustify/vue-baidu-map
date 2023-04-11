@@ -1,5 +1,3 @@
-import * as Vue from 'vue'
-
 import { Map } from './map'
 import { MapView } from './map-view'
 import { Scale } from './scale'
@@ -49,7 +47,7 @@ export interface InstallationOptions {
  * Please do not invoke this method directly.
  * Call `Vue.use(BaiduMap)` to install.
  */
-declare function install (vue: typeof Vue, options: InstallationOptions): void
+declare function install (app: import("vue").App, options: InstallationOptions): void
 
 declare const _default: {
   install: typeof install
