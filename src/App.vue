@@ -16,7 +16,12 @@
                 opts: { anchor: { width: 16, height: 25 }, imageSize: { width: 32, height: 49 } }
             }"
             :rotation="direction"
-        />
+        >
+          <bm-label
+              :content="111111111111"
+              :offset="{ width: '-20', height: '30' }"
+          />
+        </bm-marker>
         <bm-info-window
             ref="infoWindow"
             class="infoWindow"
