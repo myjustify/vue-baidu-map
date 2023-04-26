@@ -1,7 +1,7 @@
 {
-  "name": "vue-baidu-map",
-  "version": "0.21.22",
-  "description": "Baidu Map Component for Vue 2.0",
+  "name": "v2-baidu-map-gl",
+  "version": "0.0.1",
+  "description": "Baidu Map Component for Vue 2.0 gl版本",
   "main": "index.js",
   "directories": {
     "doc": "docs"
@@ -18,7 +18,7 @@
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dafrok/vue-baidu-map.git"
+    "url": "git+https://github.com/myjustify/vue-baidu-map.git"
   },
   "keywords": [
     "vue",
@@ -28,12 +28,12 @@
     "baidu",
     "map"
   ],
-  "author": "Dafrok <o.o@mug.dog>",
+  "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Dafrok/vue-baidu-map/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/Dafrok/vue-baidu-map#readme",
+  "homepage": "https://github.com/myjustify/vue-baidu-map",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
@@ -88,6 +88,7 @@
     "vue": "^2.1.8"
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bmaplib.curveline": "^1.0.0",
     "bmaplib.heatmap": "^1.0.4",
     "bmaplib.lushu": "^1.0.7",
