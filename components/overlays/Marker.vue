@@ -1,17 +1,17 @@
 <template>
-<div>
-  <slot></slot>
-</div>
+  <div>
+    <slot />
+  </div>
 </template>
 
 <script>
 import commonMixin from '../base/mixins/common.js'
 import bindEvents from '../base/bindEvent.js'
-import {createLabel, createIcon, createPoint} from '../base/factory.js'
-
+import {createLabel, createIcon, createPoint, clearFalse, createSize} from '../base/factory.js'
+const { methods, ...reset } = commonMixin('overlay')
+const global = window
 export default {
   name: 'bm-marker',
-  mixins: [commonMixin('overlay')],
   props: {
     position: {},
     offset: {},
@@ -61,27 +61,29 @@ export default {
   },
   watch: {
     'position.lng' (val, oldVal) {
-      const {BMap, originInstance, position, renderByParent, $parent} = this
+      const { BMap, originInstance, position, renderByParent, $parent } = this
       if (val !== oldVal && val >= -180 && val <= 180) {
-        originInstance.setPosition(createPoint(BMap, {lng: val, lat: position.lat}))
+        originInstance.setPosition(createPoint(BMap, { lng: val,
+          lat: position.lat }))
       }
       renderByParent && $parent.reload()
     },
     'position.lat' (val, oldVal) {
-      const {BMap, originInstance, position, renderByParent, $parent} = this
+      const { BMap, originInstance, position, renderByParent, $parent } = this
       if (val !== oldVal && val >= -74 && val <= 74) {
-        originInstance.setPosition(createPoint(BMap, {lng: position.lng, lat: val}))
+        originInstance.setPosition(createPoint(BMap, { lng: position.lng,
+          lat: val }))
       }
       renderByParent && $parent.reload()
     },
     'offset.width' (val, oldVal) {
-      const {BMap, originInstance} = this
+      const { BMap, originInstance } = this
       if (val !== oldVal) {
         originInstance.setOffset(new BMap.Size(val, this.offset.height))
       }
     },
     'offset.height' (val, oldVal) {
-      const {BMap, originInstance} = this
+      const { BMap, originInstance } = this
       if (val !== oldVal) {
         originInstance.setOffset(new BMap.Size(this.offset.width, val))
       }
@@ -89,7 +91,7 @@ export default {
     icon: {
       deep: true,
       handler (val) {
-        const {BMap, originInstance, rotation} = this
+        const { BMap, originInstance, rotation } = this
         originInstance && originInstance.setIcon(createIcon(BMap, val))
         rotation && originInstance && originInstance.setRotation(rotation)
       }
@@ -133,19 +135,23 @@ export default {
   },
   methods: {
     load () {
-      const {BMap, map, position, offset, icon, massClear, dragging, clicking, raiseOnDrag, draggingCursor, rotation, shadow, title, label, animation, top, renderByParent, $parent, zIndex} = this
-      const overlay = new BMap.Marker(new BMap.Point(position.lng, position.lat), {
-        offset,
-        icon: icon && createIcon(BMap, icon),
-        enableMassClear: massClear,
-        enableDragging: dragging,
-        enableClicking: clicking,
-        raiseOnDrag,
-        draggingCursor,
-        rotation,
-        shadow,
-        title
-      })
+      const { BMap, map, position, offset, icon, massClear, dragging, clicking, raiseOnDrag, draggingCursor, rotation, shadow, title, label, animation, top, renderByParent, $parent, zIndex } = this
+      const { offset: offsetTmp, icon: iconTmp } = clearFalse({ offset, icon })
+      const overlay = new BMap.Marker(
+          new BMap.Point(position.lng, position.lat),
+          clearFalse({
+            offset: offsetTmp && createSize(BMap, offsetTmp),
+            icon: iconTmp && createIcon(BMap, iconTmp),
+            enableMassClear: massClear,
+            enableDragging: dragging,
+            enableClicking: clicking,
+            raiseOnDrag,
+            draggingCursor,
+            rotation,
+            shadow,
+            title
+          }, { deep: false })
+      )
       this.originInstance = overlay
       label && overlay && overlay.setLabel(createLabel(BMap, label))
       overlay.setTop(top)
@@ -157,7 +163,9 @@ export default {
         map.addOverlay(overlay)
       }
       overlay.setAnimation(global[animation])
-    }
-  }
+    },
+    ...methods
+  },
+  ...reset
 }
 </script>

@@ -14,9 +14,8 @@ const types = {
 }
 
 const getParent = $component => ($component.abstract || $component.$el === $component.$children[0].$el) ? getParent($component.$parent) : $component
-
 function destroyInstance () {
-  const {unload, renderByParent, $parent} = this
+  const { unload, renderByParent, $parent } = this
   if (renderByParent) {
     $parent.reload()
   }
@@ -46,7 +45,7 @@ class Mixin {
         })
       },
       unload () {
-        const {map, originInstance} = this
+        const { map, originInstance } = this
         try {
           switch (prop.type) {
             case 'search':
@@ -70,12 +69,12 @@ class Mixin {
     this.mounted = function () {
       const $parent = getParent(this.$parent)
       const map = $parent.map
-      const {ready} = this
-      map ? ready() : $parent.$on('ready', ready)
+      const { ready } = this
+      map && ready()
     }
-    this.destroyed = destroyInstance
-    this.beforeDestroy = destroyInstance
+    this.unmounted = destroyInstance
+    this.beforeUnmount = destroyInstance
   }
 }
 
-export default type => new Mixin({type})
+export default type => new Mixin({ type })

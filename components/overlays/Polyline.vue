@@ -1,12 +1,10 @@
 <script>
 import commonMixin from '../base/mixins/common.js'
 import bindEvents from '../base/bindEvent.js'
-import {createPoint, createIconSequence} from '../base/factory.js'
-
+import { createPoint, createIconSequence } from '../base/factory.js'
+const { methods, ...reset } = commonMixin('overlay')
 export default {
   name: 'bm-polyline',
-  render () {},
-  mixins: [commonMixin('overlay')],
   props: {
     path: {
       type: Array
@@ -40,6 +38,14 @@ export default {
       default () {
         return []
       }
+    }
+  },
+  computed: {
+    iconSequences () {
+      const { BMap, icons } = this
+      return icons.map(item => {
+        return createIconSequence(BMap, item)
+      })
     }
   },
   watch: {
@@ -77,31 +83,26 @@ export default {
       this.reload()
     }
   },
-  computed: {
-    iconSequences () {
-      const {BMap, icons} = this
-      return icons.map(item => {
-        return createIconSequence(BMap, item)
-      })
-    }
-  },
   methods: {
     load () {
-      const {BMap, map, path, strokeColor, strokeWeight, strokeOpacity, strokeStyle, editing, massClear, clicking, iconSequences} = this
-      const overlay = new BMap.Polyline(path.map(item => createPoint(BMap, {lng: item.lng, lat: item.lat})), {
-        strokeColor,
-        strokeWeight,
-        strokeOpacity,
-        strokeStyle,
-        enableEditing: editing,
-        enableMassClear: massClear,
-        enableClicking: clicking,
-        icons: iconSequences
-      })
+      const { BMap, map, path, strokeColor, strokeWeight, strokeOpacity, strokeStyle, editing, massClear, clicking, iconSequences } = this
+      const overlay = new BMap.Polyline(path.map(item => createPoint(BMap, { lng: item.lng,
+        lat: item.lat })), {
+          strokeColor,
+          strokeWeight,
+          strokeOpacity,
+          strokeStyle,
+          enableEditing: editing,
+          enableMassClear: massClear,
+          enableClicking: clicking,
+          icons: iconSequences
+        })
       this.originInstance = overlay
       map.addOverlay(overlay)
       bindEvents.call(this, overlay)
-    }
-  }
+    },
+    ...methods
+  },
+  ...reset
 }
 </script>

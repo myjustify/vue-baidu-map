@@ -1,7 +1,7 @@
 <script>
 import commonMixin from '../base/mixins/common.js'
 import bindEvents from '../base/bindEvent.js'
-import {createPoint, createSize} from '../base/factory.js'
+import {clearFalse, createPoint, createSize} from '../base/factory.js'
 
 export default {
   name: 'bm-label',
@@ -78,21 +78,25 @@ export default {
   methods: {
     load () {
       const {BMap, map, content, title, offset, position, labelStyle, zIndex, massClear, $parent} = this
-      const overlay = new BMap.Label(content, {
-        offset: createSize(BMap, offset),
-        position: createPoint(BMap, position),
+      const overlay = new BMap.Label(content, clearFalse({
+        offset: offset && offset.width && createSize(BMap, offset),
+        position: position && position.lat && createPoint(BMap, position),
         enableMassClear: massClear
-      })
+      }, {
+        deep: false
+      }))
       this.originInstance = overlay
-      try {
-        $parent.originInstance.setLabel(overlay)
-      } catch (e) {
-        map.addOverlay(overlay)
-      }
-      title && overlay.setTitle(title)
-      labelStyle && overlay.setStyle(labelStyle)
-      zIndex && overlay.setZIndex(zIndex)
-      bindEvents.call(this, overlay)
+      this.$nextTick(() => {
+        try {
+          $parent.originInstance.setLabel(overlay)
+        } catch (e) {
+          map.addOverlay(overlay)
+        }
+        title && overlay.setTitle(title)
+        labelStyle && overlay.setStyle(labelStyle)
+        zIndex && overlay.setZIndex(zIndex)
+        bindEvents.call(this, overlay)
+      })
     }
   }
 }

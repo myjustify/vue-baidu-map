@@ -1,9 +1,9 @@
 <template>
   <div>
     <div
-        v-if="!hasBmView"
-        ref="view"
-        style="width: 100%; height: 100%"
+      v-if="!hasBmView"
+      ref="view"
+      style="width: 100%; height: 100%"
     />
     <slot />
   </div>
@@ -16,10 +16,10 @@ const global = window
 const mapType = 'webgl' // webgl -> BMapGL v3/v2 -> BMap
 const BAIDU_MAP_NAME = mapType === 'webgl' ? 'BMapGL' : 'BMap'
 const SCRIPT_SRC = mapType === 'webgl'
-    ? `//api.map.baidu.com/api?v=1.0&&type=webgl&callback=_initBaiduMap`
-    : mapType === 'v3'
-        ? `//api.map.baidu.com/api?v=3.0&callback=_initBaiduMap`
-        : `//api.map.baidu.com/api?v=2.0&callback=_initBaiduMap`
+  ? `//api.map.baidu.com/api?v=1.0&&type=webgl&callback=_initBaiduMap`
+  : mapType === 'v3'
+    ? `//api.map.baidu.com/api?v=3.0&callback=_initBaiduMap`
+    : `//api.map.baidu.com/api?v=2.0&callback=_initBaiduMap`
 
 const SET_MAP_STYLE = mapType === 'webgl' ? 'setMapStyleV2' : 'setMapStyle'
 export default {
@@ -295,7 +295,7 @@ export default {
     reset () {
       const { getMapScript, initMap } = this
       getMapScript()
-          .then(initMap)
+        .then(initMap)
     }
   }
 }

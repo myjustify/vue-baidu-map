@@ -1,15 +1,14 @@
 <template>
-<div>
-  <slot></slot>
-</div>
+  <div>
+    <slot />
+  </div>
 </template>
 
 <script>
 import commonMixin from '../base/mixins/common.js'
-
+const { methods, ...reset } = commonMixin('overlay')
 export default {
   name: 'bm-overlay',
-  mixins: [commonMixin('overlay')],
   props: {
     pane: {
       type: String
@@ -22,7 +21,7 @@ export default {
   },
   methods: {
     load () {
-      const {BMap, map, $el, pane} = this
+      const { BMap, map, $el, pane } = this
       const $emit = this.$emit.bind(this)
       class CustomOverlay extends BMap.Overlay {
         initialize () {
@@ -49,7 +48,9 @@ export default {
       const overlay = new CustomOverlay()
       this.originInstance = overlay
       map.addOverlay(overlay)
-    }
-  }
+    },
+    ...methods
+  },
+  ...reset
 }
 </script>
