@@ -82,9 +82,7 @@ export default {
         offset: offset && offset.width && createSize(BMap, offset),
         position: position && position.lat && createPoint(BMap, position),
         enableMassClear: massClear
-      }), {
-        deep: false
-      })
+      },{ deep: false }))
       this.originInstance = overlay
       this.$nextTick(() => {
         try {

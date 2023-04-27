@@ -1,6 +1,6 @@
 {
   "name": "v3-baidu-map",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "type": "module",
   "main": "dist/v3-baidu-map.js",
   "exports": {
