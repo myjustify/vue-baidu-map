@@ -70,7 +70,11 @@ class Mixin {
       const $parent = getParent(this.$parent)
       const map = $parent.map
       const { ready } = this
-      map && ready()
+      if (map) {
+        ready()
+      } else {
+        $parent.$once('ready', ready)
+      }
     }
     this.unmounted = destroyInstance
     this.beforeUnmount = destroyInstance

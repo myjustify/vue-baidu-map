@@ -236,24 +236,22 @@ export default {
         return
       }
       let $el = this.$refs.view
-      // for (let $node of this.$slots.default || []) {
-      //   if ($node.componentOptions && $node.componentOptions.tag === 'bm-view') {
-      //     this.hasBmView = true
-      //     $el = $node.elm
-      //   }
-      // }
-      setTimeout(() => {
-        const map = new BMap.Map($el, { enableHighResolution: this.highResolution, enableMapClick: this.mapClick })
-        this.map = map
-        const { setMapOptions, zoom, getCenterPoint, theme, mapStyle } = this
-        theme ? map[SET_MAP_STYLE]({ styleJson: theme }) : (mapStyle && map[SET_MAP_STYLE](mapStyle))
-        setMapOptions()
-        bindEvents.call(this, map)
-        // 此处强行初始化一次地图 回避一个由于错误的 center 字符串导致初始化失败抛出的错误
-        // map.reset()
-        map.centerAndZoom(getCenterPoint(), zoom)
-        this.$emit('ready', { BMap, map })
-      })
+      for (let $node of this.$slots.default || []) {
+        if ($node.componentOptions && $node.componentOptions.tag === 'bm-view') {
+          this.hasBmView = true
+          $el = $node.elm
+        }
+      }
+      const map = new BMap.Map($el, { enableHighResolution: this.highResolution, enableMapClick: this.mapClick })
+      this.map = map
+      const { setMapOptions, zoom, getCenterPoint, theme, mapStyle } = this
+      theme ? map[SET_MAP_STYLE]({ styleJson: theme }) : (mapStyle && map[SET_MAP_STYLE](mapStyle))
+      setMapOptions()
+      bindEvents.call(this, map)
+      // 此处强行初始化一次地图 回避一个由于错误的 center 字符串导致初始化失败抛出的错误
+      map.reset()
+      map.centerAndZoom(getCenterPoint(), zoom)
+      this.$emit('ready', { BMap, map })
       // Debug
       // global.map = map
       // global.mapComponent = this
