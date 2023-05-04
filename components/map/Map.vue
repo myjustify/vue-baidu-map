@@ -248,9 +248,9 @@ export default {
       theme ? map[SET_MAP_STYLE]({ styleJson: theme }) : (mapStyle && map[SET_MAP_STYLE](mapStyle))
       setMapOptions()
       bindEvents.call(this, map)
+      map.centerAndZoom(getCenterPoint(), zoom)
       // 此处强行初始化一次地图 回避一个由于错误的 center 字符串导致初始化失败抛出的错误
       map.reset()
-      map.centerAndZoom(getCenterPoint(), zoom)
       this.$emit('ready', { BMap, map })
       // Debug
       // global.map = map
@@ -266,6 +266,8 @@ export default {
     },
     initMap (BMap) {
       this.BMap = BMap
+      // BMap BMapGL 兼容lushu 先这样处理
+      global.BMap = BMap
       this.init(BMap)
     },
     getMapScript () {
