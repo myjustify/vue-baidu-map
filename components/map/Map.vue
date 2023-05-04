@@ -266,8 +266,6 @@ export default {
     },
     initMap (BMap) {
       this.BMap = BMap
-      // BMap BMapGL 兼容lushu 先这样处理
-      global.BMap = BMap
       this.init(BMap)
     },
     getMapScript () {

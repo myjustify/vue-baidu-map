@@ -1,17 +1,29 @@
 diff --git a/node_modules/bmaplib.lushu/index.js b/node_modules/bmaplib.lushu/index.js
-index a793df6..c56b2f4 100644
+index a793df6..1a75ec7 100644
 --- a/node_modules/bmaplib.lushu/index.js
 +++ b/node_modules/bmaplib.lushu/index.js
-@@ -161,7 +161,7 @@
+@@ -151,19 +151,13 @@
+      * @exports LuShu as BMapLib.LuShu
+      */
+     var LuShu = function(map, path, opts) {
+-        try {
+-            BMap;
+-        } catch (e) {
+-            throw Error('Baidu Map JS API is not ready yet!');
+-        }
+         if (!path || path.length < 1) {
+             return;
          }
          this._map = map;
          this._path = path;
 -        this.i = 0;
 +        this.i = -1;
          this._setTimeoutQuene = [];
-         this._projection = this._map.getMapType().getProjection();
+-        this._projection = this._map.getMapType().getProjection();
          this._opts = {
-@@ -191,14 +191,15 @@
+             icon: null,
+             speed: 4000,
+@@ -191,14 +185,15 @@
          var me = this,
              len = me._path.length;
          this._opts.onstart && this._opts.onstart(me)
@@ -29,7 +41,7 @@ index a793df6..c56b2f4 100644
              me._timeoutFlag = setTimeout(function() {
                      !me._overlay && me._addInfoWin();
                      me._moveNext(me.i);
-@@ -208,7 +209,7 @@
+@@ -208,7 +203,7 @@
          this._fromStop = false;
      },
      LuShu.prototype.stop = function() {
@@ -38,7 +50,13 @@ index a793df6..c56b2f4 100644
          this._fromStop = true;
          clearInterval(this._intervalFlag);
          this._clearTimeout();
-@@ -268,7 +269,7 @@
+@@ -263,35 +258,38 @@
+             this._opts.showInfoWindow ? this.showInfoWindow() : this.hideInfoWindow()
+         },
+         _getMercator: function(poi) {
+-            return this._map.getMapType().getProjection().lngLatToPoint(poi);
++            return this._map.pointToPixel(poi);
+         },
          _getDistance: function(pxA, pxB) {
              return Math.sqrt(Math.pow(pxA.x - pxB.x, 2) + Math.pow(pxA.y - pxB.y, 2));
          },
@@ -47,8 +65,11 @@ index a793df6..c56b2f4 100644
              var me = this,
                  currentCount = 0,
                  timer = 10,
-@@ -277,15 +278,18 @@
-                 target_pos = this._projection.lngLatToPoint(targetPos),
+                 step = this._opts.speed / (1000 / timer),
+-                init_pos = this._projection.lngLatToPoint(initPos),
+-                target_pos = this._projection.lngLatToPoint(targetPos),
++                init_pos = this._map.pointToPixel(initPos),
++                target_pos = this._map.pointToPixel(targetPos),
                  count = Math.round(me._getDistance(init_pos, target_pos) / step);
              if (count < 1) {
 +                me._opts.onTick && me._opts.onTick(index);
@@ -69,7 +90,14 @@ index a793df6..c56b2f4 100644
  	                me._moveNext(++me.i);
  	            } else {
                      currentCount++;
-@@ -352,8 +356,9 @@
+                     var x = effect(init_pos.x, target_pos.x, currentCount, count),
+                         y = effect(init_pos.y, target_pos.y, currentCount, count),
+-                        pos = me._projection.pointToLngLat(new BMap.Pixel(x, y));
++                        pos = me._map.pixelToPoint(new BMap.Pixel(x, y));
+                     if(currentCount == 1){
+                         var proPos = null;
+                         if(me.i - 1 >= 0){
+@@ -352,8 +350,9 @@
          _moveNext: function(index) {
              var me = this;
              if (index < this._path.length - 1) {
