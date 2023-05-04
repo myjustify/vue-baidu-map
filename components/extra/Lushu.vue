@@ -118,7 +118,7 @@ export default {
           this.$emit('tick', e)
         },
         onpause: e => this.$emit('pause')
-      })
+      }, BMap)
       play && path.length && lushu.start(this)
       path.length && (content && infoWindow ? lushu.showInfoWindow() : lushu.hideInfoWindow())
     },
