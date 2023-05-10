@@ -5,6 +5,7 @@ import { createPoint, createIconSequence } from '../base/factory.js'
 const { methods, ...reset } = commonMixin('overlay')
 export default {
   name: 'bm-polyline',
+  render () {},
   props: {
     path: {
       type: Array
