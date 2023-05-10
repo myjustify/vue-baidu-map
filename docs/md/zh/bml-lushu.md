@@ -111,12 +111,12 @@ export default {
         </md-table-cell>
         <md-table-cell>
           <md-input-container>
-            <md-input v-model.number="speed">
+            <md-input v-model.number="speed" />
           </md-input-container>
         </md-table-cell>
         <md-table-cell>
           <md-input-container>
-            <md-input v-model="content">
+            <md-input v-model="content" />
           </md-input-container>
         </md-table-cell>
       </md-table-row>
@@ -155,7 +155,7 @@ export default {
   },
   methods: {
     changeBtnText (val) {
-      this.btnText = val
+      this.btnText = val;
       if (val === 'play_arrow') {
         this.play = false
       }

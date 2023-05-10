@@ -1,6 +1,6 @@
 {
   "name": "v2-baidu-map-gl",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Baidu Map Component for Vue 2.0 gl版本",
   "main": "index.js",
   "directories": {
@@ -9,7 +9,7 @@
   "scripts": {
     "build:docs": "webpack -p --config ./build/webpack.docs.config.js",
     "build": "patch-package && webpack -p --config ./build/webpack.prod.config.js",
-    "dev": "webpack-dev-server --content-base docs --config ./build/webpack.docs.config.js --hot --inline",
+    "dev": "patch-package && webpack-dev-server --content-base docs --config ./build/webpack.docs.config.js --hot --inline",
     "deploy": "npm run build && npm run build:docs",
     "test": "karma start",
     "lint": "eslint --ext .js,.vue src docs build",
@@ -75,14 +75,14 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "url-loader": "^0.5.7",
-    "vue": "^2.4.3",
-    "vue-loader": "^10.0.2",
+    "vue": "2.6.14",
+    "vue-loader": "10.3.0",
     "vue-markdown-loader": "^0.6.2",
     "vue-material": "^0.7.4",
     "vue-router": "^2.7.0",
-    "vue-template-compiler": "^2.4.3",
-    "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.4"
+    "vue-template-compiler": "2.6.14",
+    "webpack": "2.7.0",
+    "webpack-dev-server": "2.11.5"
   },
   "peerDependencies": {
     "vue": "^2.1.8"
