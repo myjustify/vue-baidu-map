@@ -147,7 +147,6 @@ export default {
             enableClicking: clicking,
             raiseOnDrag,
             draggingCursor,
-            rotation,
             shadow,
             title
           }, { deep: false })
@@ -163,6 +162,7 @@ export default {
         map.addOverlay(overlay)
       }
       overlay.setAnimation(global[animation])
+      overlay.setRotation(rotation || 0)
     },
     ...methods
   },
