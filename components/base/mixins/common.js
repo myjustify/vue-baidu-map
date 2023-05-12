@@ -76,8 +76,8 @@ class Mixin {
         $parent.$once('ready', ready)
       }
     }
-    this.unmounted = destroyInstance
-    this.beforeUnmount = destroyInstance
+    this.destroyed = destroyInstance
+    this.beforeDestroy = destroyInstance
   }
 }
 
