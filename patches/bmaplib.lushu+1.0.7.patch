@@ -1,5 +1,5 @@
 diff --git a/node_modules/bmaplib.lushu/index.js b/node_modules/bmaplib.lushu/index.js
-index a793df6..7cd3016 100644
+index a793df6..1389198 100644
 --- a/node_modules/bmaplib.lushu/index.js
 +++ b/node_modules/bmaplib.lushu/index.js
 @@ -4,8 +4,8 @@
@@ -13,8 +13,52 @@ index a793df6..7cd3016 100644
      }
  })(this, function() {
      var baidu = {};
-@@ -148,11 +148,11 @@
+@@ -40,7 +40,7 @@
+     baidu.dom.getComputedStyle = function(element, key) {
+         element = baidu.dom._g(element);
+         var doc = baidu.dom.getDocument(element),
+-            styles;
++          styles;
+         if (doc.defaultView && doc.defaultView.getComputedStyle) {
+             styles = doc.defaultView.getComputedStyle(element, null);
+             if (styles) {
+@@ -75,8 +75,8 @@
+         key = baidu.string.toCamelCase(key);
+ 
+         var value = element.style[key] ||
+-                    (element.currentStyle ? element.currentStyle[key] : '') ||
+-                    dom.getComputedStyle(element, key);
++          (element.currentStyle ? element.currentStyle[key] : '') ||
++          dom.getComputedStyle(element, key);
+ 
+         if (!value) {
+             var fixer = dom._styleFixer[key];
+@@ -133,26 +133,26 @@
+     baidu.setAttrs = baidu.dom.setAttrs;
+     baidu.dom.create = function(tagName, opt_attributes) {
+         var el = document.createElement(tagName),
+-            attributes = opt_attributes || {};
++          attributes = opt_attributes || {};
+         return baidu.dom.setAttrs(el, attributes);
      };
+     baidu.object = baidu.object || {};
+     baidu.extend =
+-    baidu.object.extend = function(target, source) {
+-        for (var p in source) {
+-            if (source.hasOwnProperty(p)) {
+-                target[p] = source[p];
+-            }
+-        }
+-        return target;
+-    };
++      baidu.object.extend = function(target, source) {
++          for (var p in source) {
++              if (source.hasOwnProperty(p)) {
++                  target[p] = source[p];
++              }
++          }
++          return target;
++      };
  
      /**
 -     * @exports LuShu as BMapLib.LuShu
@@ -47,33 +91,58 @@ index a793df6..7cd3016 100644
              this._opts.icon = defaultIcon;
          }
      }
-@@ -191,14 +190,15 @@
+@@ -189,34 +188,35 @@
+     }
+     LuShu.prototype.start = function() {
          var me = this,
-             len = me._path.length;
+-            len = me._path.length;
++          len = me._path.length;
          this._opts.onstart && this._opts.onstart(me)
 -        if (me.i && me.i < len - 1) {
 +        if (me.i != -1 && me.i < len - 1) {
              if (!me._fromPause) {
                  return;
              }else if(!me._fromStop){
- 	            me._moveNext(++me.i);
+-	            me._moveNext(++me.i);
++                me._moveNext(++me.i);
              }
          }else {
 -            !me._marker && me._addMarker();
 +            me.i = 0;
 +            me._addMarker();
              me._timeoutFlag = setTimeout(function() {
-                     !me._overlay && me._addInfoWin();
-                     me._moveNext(me.i);
-@@ -208,7 +208,7 @@
+-                    !me._overlay && me._addInfoWin();
+-                    me._moveNext(me.i);
++                !me._overlay && me._addInfoWin();
++                me._moveNext(me.i);
+             },400);
+         }
+         this._fromPause = false;
          this._fromStop = false;
      },
-     LuShu.prototype.stop = function() {
+-    LuShu.prototype.stop = function() {
 -        this.i = 0;
-+        this.i = -1;
-         this._fromStop = true;
+-        this._fromStop = true;
+-        clearInterval(this._intervalFlag);
+-        this._clearTimeout();
+-        for (var i = 0, t = this._opts.landmarkPois, len = t.length; i < len; i++) {
+-            t[i].bShow = false;
+-        }
+-        this._opts.onstop && this._opts.onstop(this)
+-    };
++      LuShu.prototype.stop = function() {
++          this.i = -1;
++          this._fromStop = true;
++          clearInterval(this._intervalFlag);
++          this._clearTimeout();
++          for (var i = 0, t = this._opts.landmarkPois, len = t.length; i < len; i++) {
++              t[i].bShow = false;
++          }
++          this._opts.onstop && this._opts.onstop(this)
++      };
+     LuShu.prototype.pause = function() {
          clearInterval(this._intervalFlag);
-         this._clearTimeout();
+         this._fromPause = true;
 @@ -247,7 +247,7 @@
                  clearTimeout(this._timeoutFlag);
              }
@@ -83,61 +152,83 @@ index a793df6..7cd3016 100644
              this._opts.icon && marker.setIcon(this._opts.icon);
              this._map.addOverlay(marker);
              marker.setAnimation(BMAP_ANIMATION_DROP);
-@@ -263,35 +263,42 @@
-             this._opts.showInfoWindow ? this.showInfoWindow() : this.hideInfoWindow()
-         },
-         _getMercator: function(poi) {
--            return this._map.getMapType().getProjection().lngLatToPoint(poi);
-+            return this._map.pointToPixel(poi);
-         },
+@@ -268,30 +268,36 @@
          _getDistance: function(pxA, pxB) {
              return Math.sqrt(Math.pow(pxA.x - pxB.x, 2) + Math.pow(pxA.y - pxB.y, 2));
          },
 -        _move: function(initPos,targetPos,effect) {
 +        _move: function(initPos,targetPos,effect, index) {
              var me = this,
-                 currentCount = 0,
-                 timer = 10,
-                 step = this._opts.speed / (1000 / timer),
+-                currentCount = 0,
+-                timer = 10,
+-                step = this._opts.speed / (1000 / timer),
 -                init_pos = this._projection.lngLatToPoint(initPos),
 -                target_pos = this._projection.lngLatToPoint(targetPos),
 -                count = Math.round(me._getDistance(init_pos, target_pos) / step);
-+                init_pos = function () {
-+                    return me._map.pointToPixel(initPos)
-+                },
-+                target_pos = function () {
-+                    return me._map.pointToPixel(targetPos)
-+                },
-+                count = Math.round(me._getDistance(init_pos(), target_pos()) / step);
++              currentCount = 0,
++              timer = 10,
++              step = this._opts.speed / (1000 / timer),
++              init_pos = BMapGL.Projection.convertLL2MC(initPos),
++              //获取结束点的(x,y)坐标
++              target_pos = BMapGL.Projection.convertLL2MC(targetPos);
++            init_pos = new BMapGL.Pixel(init_pos.lng, init_pos.lat);
++            target_pos = new BMapGL.Pixel(target_pos.lng, target_pos.lat);
++            var count = me._getDistance(init_pos, target_pos)
              if (count < 1) {
 +                me._opts.onTick && me._opts.onTick(index);
                  me._moveNext(++me.i);
                  return;
              }
              me._intervalFlag = setInterval(function() {
- 	            if (currentCount >= count) {
-+                  me._opts.onTick && me._opts.onTick(index);
- 	                clearInterval(me._intervalFlag);
+-	            if (currentCount >= count) {
+-	                clearInterval(me._intervalFlag);
 -		        	if(me.i > me._path.length){
 -						return;
 -		        	}
-+                  if(me.i > me._path.length){
-+                      me._opts.onTick && me._opts.onTick(index);
-+                    return;
-+                  }
- 	                me._moveNext(++me.i);
- 	            } else {
+-	                me._moveNext(++me.i);
+-	            } else {
++                if (currentCount >= count) {
++                    me._opts.onTick && me._opts.onTick(index);
++                    clearInterval(me._intervalFlag);
++                    if(me.i > me._path.length){
++                        me._opts.onTick && me._opts.onTick(index);
++                        return;
++                    }
++                    me._moveNext(++me.i);
++                } else {
                      currentCount++;
--                    var x = effect(init_pos.x, target_pos.x, currentCount, count),
+                     var x = effect(init_pos.x, target_pos.x, currentCount, count),
 -                        y = effect(init_pos.y, target_pos.y, currentCount, count),
 -                        pos = me._projection.pointToLngLat(new BMap.Pixel(x, y));
-+                    var x = effect(init_pos().x, target_pos().x, currentCount, count),
-+                        y = effect(init_pos().y, target_pos().y, currentCount, count),
-+                        pos = me._map.pixelToPoint(new BMapGL.Pixel(x, y));
++                      y = effect(init_pos.y, target_pos.y, currentCount, count),
++                      pos = BMapGL.Projection.convertMC2LL(new BMapGL.Point(x, y));
                      if(currentCount == 1){
                          var proPos = null;
                          if(me.i - 1 >= 0){
-@@ -352,8 +359,9 @@
+@@ -309,18 +315,18 @@
+                     me._marker.setPosition(pos);
+                     me._setInfoWin(pos);
+                 }
+-	        },timer);
++            },timer);
+         },
+         setRotation : function(prePos,curPos,targetPos){
+             var me = this;
+             var deg = 0;
+             //start!
+-            curPos =  me._map.pointToPixel(curPos);
+-            targetPos =  me._map.pointToPixel(targetPos);   
++            curPos =  me._map.pointToPixel(BMapGL.Point(curPos.lng, curPos.lat));
++            targetPos =  me._map.pointToPixel(BMapGL.Point(targetPos.lng, targetPos.lat));
+ 
+             if(targetPos.x != curPos.x){
+                 var tan = (targetPos.y - curPos.y)/(targetPos.x - curPos.x),
+-                atan  = Math.atan(tan);
++                  atan  = Math.atan(tan);
+                 deg = atan*360/(2*Math.PI);
+                 //degree  correction;
+                 if(targetPos.x < curPos.x){
+@@ -352,8 +358,9 @@
          _moveNext: function(index) {
              var me = this;
              if (index < this._path.length - 1) {
@@ -148,7 +239,16 @@ index a793df6..7cd3016 100644
                  me.stop()
              }
          },
-@@ -394,7 +402,7 @@
+@@ -386,7 +393,7 @@
+         _tween: {
+             linear: function(initPos, targetPos, currentCount, count) {
+                 var b = initPos, c = targetPos - initPos, t = currentCount,
+-                d = count;
++                  d = count;
+                 return c * t / d + b;
+             }
+         },
+@@ -394,14 +401,14 @@
              var t = this._opts.landmarkPois, distance;
              for (var i = 0, len = t.length; i < len; i++) {
                  if (!t[i].bShow) {
@@ -157,7 +257,15 @@ index a793df6..7cd3016 100644
                      if (distance < 10) {
                          t[i].bShow = true;
                          return i;
-@@ -410,7 +418,7 @@
+                     }
+                 }
+             }
+-           return -1;
++            return -1;
+         }
+     });
+     function CustomOverlay(point,html) {
+@@ -410,7 +417,7 @@
      }
  
      function initCustomOverlay() {
@@ -166,3 +274,18 @@ index a793df6..7cd3016 100644
          CustomOverlay.prototype.initialize = function(map) {
              var div = this._div = baidu.dom.create('div', {style: 'border:solid 1px #ccc;width:auto;min-width:50px;text-align:center;position:absolute;background:#fff;color:#000;font-size:12px;border-radius: 10px;padding:5px;white-space: nowrap;'});
              div.innerHTML = this._html;
+@@ -424,10 +431,10 @@
+         baidu.object.extend(CustomOverlay.prototype, {
+             setPosition: function(poi,markerSize) {
+                 var px = this._map.pointToOverlayPixel(poi),
+-                    styleW = baidu.dom.getStyle(this._div, 'width'),
+-                    styleH = baidu.dom.getStyle(this._div, 'height'),
+-                    overlayW = parseInt(this._div.clientWidth || styleW, 10),
+-                    overlayH = parseInt(this._div.clientHeight || styleH, 10);
++                  styleW = baidu.dom.getStyle(this._div, 'width'),
++                  styleH = baidu.dom.getStyle(this._div, 'height'),
++                  overlayW = parseInt(this._div.clientWidth || styleW, 10),
++                  overlayH = parseInt(this._div.clientHeight || styleH, 10);
+                 this._div.style.left = px.x - overlayW / 2 + 'px';
+                 this._div.style.bottom = -(px.y - markerSize.height) + 'px';
+             },
