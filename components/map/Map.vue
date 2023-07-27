@@ -216,6 +216,9 @@ export default {
   mounted () {
     this.reset()
   },
+  beforeDestroy () {
+    this.map && this.map.destroy()
+  },
   methods: {
     setMapOptions () {
       const { map, minZoom, maxZoom, mapType, dragging, scrollWheelZoom, doubleClickZoom, keyboard, inertialDragging, continuousZoom, pinchToZoom, autoResize } = this

@@ -1,5 +1,5 @@
 diff --git a/node_modules/bmaplib.lushu/index.js b/node_modules/bmaplib.lushu/index.js
-index a793df6..30d3d85 100644
+index a793df6..a94154c 100644
 --- a/node_modules/bmaplib.lushu/index.js
 +++ b/node_modules/bmaplib.lushu/index.js
 @@ -4,8 +4,8 @@
@@ -133,7 +133,7 @@ index a793df6..30d3d85 100644
              this._opts.icon && marker.setIcon(this._opts.icon);
              this._map.addOverlay(marker);
              marker.setAnimation(BMAP_ANIMATION_DROP);
-@@ -268,30 +268,35 @@
+@@ -268,30 +268,36 @@
          _getDistance: function(pxA, pxB) {
              return Math.sqrt(Math.pow(pxA.x - pxB.x, 2) + Math.pow(pxA.y - pxB.y, 2));
          },
@@ -147,6 +147,7 @@ index a793df6..30d3d85 100644
 -                target_pos = this._projection.lngLatToPoint(targetPos),
 +                init_pos = BMapGL.Projection.convertLL2MC(initPos),
 +                //获取结束点的(x,y)坐标
++                target_pos = BMapGL.Projection.convertLL2MC(targetPos),
 +                init_pos = new BMapGL.Pixel(init_pos.lng, init_pos.lat),
 +                target_pos = new BMapGL.Pixel(target_pos.lng, target_pos.lat),
                  count = Math.round(me._getDistance(init_pos, target_pos) / step);
@@ -180,7 +181,7 @@ index a793df6..30d3d85 100644
                      if(currentCount == 1){
                          var proPos = null;
                          if(me.i - 1 >= 0){
-@@ -309,7 +314,7 @@
+@@ -309,7 +315,7 @@
                      me._marker.setPosition(pos);
                      me._setInfoWin(pos);
                  }
@@ -189,7 +190,7 @@ index a793df6..30d3d85 100644
          },
          setRotation : function(prePos,curPos,targetPos){
              var me = this;
-@@ -317,10 +322,9 @@
+@@ -317,10 +323,9 @@
              //start!
              curPos =  me._map.pointToPixel(curPos);
              targetPos =  me._map.pointToPixel(targetPos);
@@ -201,7 +202,7 @@ index a793df6..30d3d85 100644
                  deg = atan*360/(2*Math.PI);
                  //degree  correction;
                  if(targetPos.x < curPos.x){
-@@ -329,7 +333,6 @@
+@@ -329,7 +334,6 @@
                  } else {
                      deg = -deg;
                  }
@@ -209,7 +210,7 @@ index a793df6..30d3d85 100644
                  me._marker.setRotation(-deg);
  
              }else {
-@@ -352,8 +355,9 @@
+@@ -352,8 +356,9 @@
          _moveNext: function(index) {
              var me = this;
              if (index < this._path.length - 1) {
@@ -220,7 +221,7 @@ index a793df6..30d3d85 100644
                  me.stop()
              }
          },
-@@ -386,7 +390,7 @@
+@@ -386,7 +391,7 @@
          _tween: {
              linear: function(initPos, targetPos, currentCount, count) {
                  var b = initPos, c = targetPos - initPos, t = currentCount,
@@ -229,7 +230,7 @@ index a793df6..30d3d85 100644
                  return c * t / d + b;
              }
          },
-@@ -394,14 +398,14 @@
+@@ -394,14 +399,14 @@
              var t = this._opts.landmarkPois, distance;
              for (var i = 0, len = t.length; i < len; i++) {
                  if (!t[i].bShow) {
@@ -246,7 +247,7 @@ index a793df6..30d3d85 100644
          }
      });
      function CustomOverlay(point,html) {
-@@ -410,7 +414,7 @@
+@@ -410,7 +415,7 @@
      }
  
      function initCustomOverlay() {
