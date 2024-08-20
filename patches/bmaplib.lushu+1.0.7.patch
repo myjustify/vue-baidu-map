@@ -1,5 +1,5 @@
 diff --git a/node_modules/bmaplib.lushu/index.js b/node_modules/bmaplib.lushu/index.js
-index a793df6..c56b2f4 100644
+index a793df6..5ed6fc8 100644
 --- a/node_modules/bmaplib.lushu/index.js
 +++ b/node_modules/bmaplib.lushu/index.js
 @@ -161,7 +161,7 @@
@@ -47,12 +47,15 @@ index a793df6..c56b2f4 100644
              var me = this,
                  currentCount = 0,
                  timer = 10,
-@@ -277,15 +278,18 @@
+@@ -277,15 +278,20 @@
                  target_pos = this._projection.lngLatToPoint(targetPos),
                  count = Math.round(me._getDistance(init_pos, target_pos) / step);
              if (count < 1) {
+-                me._moveNext(++me.i);
 +                me._opts.onTick && me._opts.onTick(index);
-                 me._moveNext(++me.i);
++                setTimeout(function() {
++                    me._moveNext(++me.i);
++                }, 0)
                  return;
              }
              me._intervalFlag = setInterval(function() {
@@ -69,7 +72,7 @@ index a793df6..c56b2f4 100644
  	                me._moveNext(++me.i);
  	            } else {
                      currentCount++;
-@@ -352,8 +356,9 @@
+@@ -352,8 +358,9 @@
          _moveNext: function(index) {
              var me = this;
              if (index < this._path.length - 1) {
